@@ -1,223 +1,230 @@
 
 
-# ConcertRadar — Brief de Producto
-
-**Versión:** 1.0
-**Fecha:** Junio 2025
-**Autor:** Product Management
-**Estado:** Draft para validación con stakeholders
+# brief.md — ConcertRadar
 
 ---
 
 ## 1. Problema
 
-### Problema principal
+### Para los fans
+Los amantes de la música en Latinoamérica (18-35 años) enfrentan un ecosistema fragmentado e ineficiente para descubrir y asistir a conciertos:
 
-En Latinoamérica, descubrir conciertos —especialmente de la escena underground y artistas independientes locales— es una experiencia fragmentada, frustrante e ineficiente. Los usuarios dependen de múltiples fuentes desconectadas (Instagram, grupos de WhatsApp, carteles físicos, boca a boca) para enterarse de eventos cercanos, y cuando los encuentran, la compra de boletos pasa por intermediarios que cobran comisiones excesivas (15-30%) que encarecen el precio final y perjudican económicamente al artista independiente.
+- **Descubrimiento roto:** No existe una fuente única y confiable que agregue eventos mainstream *y* underground. Los conciertos de artistas independientes se promocionan en stories de Instagram, grupos de WhatsApp o flyers físicos — información efímera, dispersa y difícil de buscar.
+- **Fricción en la compra:** Las plataformas dominantes (Ticketmaster, StubHub, Passline, TuBoleta, Eventbrite) cobran comisiones del 15-30%, tienen UX deficiente en móvil, y frecuentemente sufren caídas en eventos de alta demanda.
+- **Falta de personalización real:** Ninguna plataforma aprende del gusto musical del usuario para recomendar eventos de forma proactiva y geolocalizada. El usuario tiene que buscar, no descubrir.
 
-### Problemas secundarios
-
-| # | Problema | Quién lo sufre | Impacto |
-|---|----------|----------------|---------|
-| 1 | **Descubrimiento fragmentado:** No existe un punto único que consolide la oferta de conciertos mainstream *y* underground por ubicación geográfica. | Fan / Asistente | Pierde eventos que le interesarían; se entera tarde o nunca. |
-| 2 | **Comisiones abusivas en ticketing:** Plataformas como Ticketmaster cobran service fees de hasta 30%, sin transparencia. | Fan + Artista independiente | El fan paga de más; el artista recibe menos. |
-| 3 | **Invisibilidad de la escena local:** Artistas y venues underground no tienen herramientas accesibles para promocionar y vender boletos de forma profesional. | Artista independiente / Venue pequeño | Baja asistencia, ingresos limitados, crecimiento lento de audiencia. |
-| 4 | **Falta de personalización:** Las plataformas existentes no filtran por gustos musicales reales del usuario ni priorizan proximidad geográfica de forma inteligente. | Fan / Asistente | Ruido informativo; fatiga de búsqueda. |
-| 5 | **Desconfianza en la reventa:** Boletos falsos y reventa informal generan fraude y desconfianza. | Fan / Asistente | Pérdida de dinero, mala experiencia. |
-
-### Validación del problema
-
-- El mercado de ticketing en Latinoamérica está en crecimiento sostenido, con Brasil (~40%) y México (~25%) liderando en cuota regional.
-- Ticketmaster enfrenta competencia creciente de Etix, Eventbrite y Tixr, lo que demuestra demanda insatisfecha.
-- No existe un competidor regional enfocado simultáneamente en **descubrimiento geolocalizado + escena underground + venta directa sin intermediarios**.
+### Para los artistas independientes
+- **Barrera de acceso:** Las plataformas de ticketing exigen volúmenes mínimos, contratos complejos o comisiones prohibitivas para artistas emergentes.
+- **Desconexión con su audiencia:** No tienen herramientas para llegar a fans cercanos que realmente escuchan su género.
+- **Sin datos:** Venden boletos en efectivo o por transferencia sin trazabilidad, sin analytics, sin posibilidad de hacer retargeting.
 
 ---
 
 ## 2. Solución
 
-**ConcertRadar** es una app móvil (iOS + Android) que combina descubrimiento inteligente de conciertos por geolocalización y gustos musicales con un sistema de compra directa de boletos que elimina intermediarios para artistas independientes.
+**ConcertRadar** es una app móvil (iOS + Android) que combina descubrimiento geolocalizado de conciertos, agenda personalizada por géneros y compra directa de boletos — conectando fans con música en vivo (mainstream y underground) en su ciudad, sin intermediarios costosos.
 
-### Modelo conceptual
+### Pilares funcionales
 
-```
-┌─────────────────────────────────────────────────────┐
-│                    CONCERTRADAR                      │
-│                                                      │
-│  ┌─────────────┐   ┌──────────────┐   ┌──────────┐ │
-│  │ DESCUBRIR   │──▶│ PERSONALIZAR │──▶│ COMPRAR  │ │
-│  │ Mapa + Feed │   │ Géneros +    │   │ Directo  │ │
-│  │ Geolocali-  │   │ Artistas     │   │ Sin fees │ │
-│  │ zado        │   │ favoritos    │   │ abusivos │ │
-│  └─────────────┘   └──────────────┘   └──────────┘ │
-│         │                                     │      │
-│         ▼                                     ▼      │
-│  ┌─────────────┐                     ┌──────────────┐│
-│  │ ARTISTAS &  │                     │   AGENDA     ││
-│  │ VENUES      │                     │   PERSONAL   ││
-│  │ Panel de    │                     │   Calendario ││
-│  │ autogestión │                     │   + Alertas  ││
-│  └─────────────┘                     └──────────────┘│
-└─────────────────────────────────────────────────────┘
-```
-
-### Funcionalidades core
-
-| Funcionalidad | Descripción | Diferenciador |
-|---------------|-------------|---------------|
-| **Mapa de conciertos en vivo** | Visualización de eventos cercanos en mapa interactivo con filtros por género, fecha, precio y tipo (mainstream/underground). | Geolocalización automática + cobertura underground. |
-| **Feed personalizado** | Algoritmo que prioriza eventos según géneros preferidos, artistas seguidos, historial de asistencia y proximidad. | No solo mainstream: entiende la escena local. |
-| **Compra directa de boletos** | Checkout integrado in-app con pasarela de pago local (PSE, OXXO, Mercado Pago, tarjetas). Boleto digital con QR único. | Comisión fija baja (5-8%) vs. 15-30% de incumbentes. |
-| **Panel de artista/venue** | Herramienta self-service para crear eventos, definir precios, gestionar aforos y recibir pagos directos. | Democratiza el acceso: cualquier artista puede vender. |
-| **Agenda personal** | Calendario de eventos confirmados, recordatorios inteligentes, y opción de compartir planes con amigos. | Integración con calendario del dispositivo. |
-| **Alertas de proximidad** | Notificación push cuando hay un concierto relevante cerca del usuario en tiempo real (ej: "Hay un show de jazz a 3 cuadras en 2 horas"). | Descubrimiento serendípico — nadie más lo hace. |
+| Pilar | Descripción |
+|---|---|
+| **🗺️ Radar** | Mapa interactivo con geolocalización automática que muestra conciertos cercanos en tiempo real. Filtros por género, fecha, precio y tipo (mainstream / underground). |
+| **🎵 Perfil musical** | Onboarding que conecta con Spotify/Apple Music o permite selección manual de géneros y artistas. Alimenta un motor de recomendación que mejora con cada interacción. |
+| **📅 Agenda personal** | Calendario de eventos guardados con notificaciones inteligentes (recordatorios, bajadas de precio, sold-out alerts, artistas similares en la zona). |
+| **🎟️ Compra directa** | Checkout nativo con pasarelas locales (PSE, OXXO, Mercado Pago, tarjeta), boleto digital con QR, y comisiones transparentes (máx. 5-8% vs. 15-30% del mercado). |
+| **🎤 Portal artistas** | Dashboard self-service para artistas independientes: crear evento, fijar precio, publicar, vender y ver analytics en <5 minutos. Sin mínimos ni contratos. |
 
 ---
 
 ## 3. Mercado
 
-### Mercado objetivo
+### Tamaño y crecimiento
 
-| Dimensión | Detalle |
-|-----------|---------|
-| **Geografía inicial** | Colombia, México, Argentina, Chile |
-| **Demografía** | 18-35 años, urbanos, smartphone con datos móviles |
-| **Psicografía** | Amantes de la música en vivo. Asisten a ≥3 eventos/año. Valoran descubrir artistas nuevos y apoyar la escena local. Digitalmente nativos. |
-| **Tamaño estimado** | ~45M de personas en el rango etario en los 4 países × ~35% que asisten a conciertos regularmente = **~15.7M usuarios potenciales** |
+| Indicador | Dato |
+|---|---|
+| Mercado global de ticketing online | CAGR 3.8% (2026-2032) |
+| Plataformas culturales y entretenimiento | CAGR 12.9% (2026-2033) |
+| Canal principal de compra | **Mobile-first** (>60% transacciones en LATAM) |
+| Tendencia regional | Alternativas locales a Ticketmaster ganan market share aceleradamente |
 
-### Segmentos de usuario
+### Mercado objetivo (TAM → SAM → SOM)
 
 ```
-                    MAINSTREAM ◀──────────▶ UNDERGROUND
-                         │                      │
-           ┌─────────────┤                      ├─────────────┐
-           │             │                      │             │
-     ┌─────▼─────┐ ┌────▼──────┐ ┌─────────────▼┐ ┌─────────▼────────┐
-     │ CASUAL    │ │ ENTUSIASTA│ │ EXPLORADOR    │ │ SCENE INSIDER    │
-     │ FAN       │ │ MAINSTREAM│ │ MUSICAL       │ │                  │
-     │           │ │           │ │               │ │                  │
-     │ 3-5       │ │ 6-12      │ │ 8-15+         │ │ 15-30+           │
-     │ shows/año │ │ shows/año │ │ shows/año     │ │ shows/año        │
-     │           │ │           │ │ Mezcla ambos  │ │ Underground core │
-     │ Compra    │ │ Busca     │ │ Descubre por  │ │ Ya conoce la     │
-     │ tickets   │ │ mejores   │ │ algoritmo     │ │ escena, necesita │
-     │ donde sea │ │ precios   │ │               │ │ herramienta      │
-     └───────────┘ └───────────┘ └───────────────┘ └──────────────────┘
-         20%           30%             35%               15%
-     (volumen)     (revenue)      (engagement)       (evangelistas)
+TAM — Ticketing de eventos en vivo LATAM:           ~$4.2B USD (2026)
+SAM — Conciertos y festivales CO/MX/AR/CL:          ~$980M USD
+SOM — Captura año 1 (underground + nicho):           ~$2.4M USD
 ```
 
-**Segmento prioritario MVP:** Explorador Musical — mayor propensión a probar una nueva app, alta frecuencia, genera contenido y recomendaciones orgánicas.
+### Competencia
 
-### Landscape competitivo
+| Competidor | Fortaleza | Debilidad que ConcertRadar explota |
+|---|---|---|
+| **Ticketmaster / Ocesa** | Inventario mainstream, escala | Comisiones altas, cero underground, UX pobre en móvil |
+| **Eventbrite** | Self-service para organizadores | No es discovery-first, sin recomendación musical, genérico |
+| **Passline / TuBoleta** | Presencia local | Sin geolocalización, sin personalización, sin foco en independientes |
+| **Dice** | Buen UX, anti-scalping | No opera en LATAM, no tiene ecosistema underground local |
+| **Bandsintown** | Discovery + alertas | No vende boletos directamente, no tiene escena underground LATAM |
+| **Instagram / WhatsApp** | Donde vive la escena underground hoy | No es buscable, no es transaccional, no escala |
 
-| Competidor | Fortaleza | Debilidad vs. ConcertRadar |
-|------------|-----------|----------------------------|
-| **Ticketmaster (Live Nation)** | Catálogo mainstream masivo, partnerships con venues grandes | Comisiones altas, cero cobertura underground, sin descubrimiento personalizado |
-| **Eventbrite** | Fácil de usar para organizadores, presencia global | Generalista (no solo música), sin geolocalización en tiempo real, sin foco underground |
-| **Tixr** | Diseño premium, white-label para venues | No tiene discovery del lado del fan, limitada presencia LATAM |
-| **Songkick / Bandsintown** | Buen tracking de artistas, alertas | No venden boletos directamente en LATAM, catálogo underground limitado |
-| **Boletia (MX)** | Fuerte en México, self-service | Solo México, sin mapa ni discovery inteligente |
-| **Passline (CL/AR)** | Buena presencia local | Sin personalización, sin foco en underground |
-
-### Oportunidad estratégica
-
-> Ningún jugador actual combina **descubrimiento geolocalizado + personalización por género + ticketing directo para independientes** en un solo producto diseñado para Latinoamérica. ConcertRadar ocupa un espacio blanco en la intersección de estos tres ejes.
+**Posicionamiento diferencial:** ConcertRadar es el único producto que une **discovery geolocalizado + personalización musical + transacción directa + escena underground** en LATAM.
 
 ---
 
 ## 4. Propuesta de Valor
 
-### Por segmento
+### Para fans (usuario final)
 
-**Para el fan/asistente:**
-> *"Descubre conciertos que amas cerca de ti —de Dua Lipa al bar de jazz de tu barrio— y compra boletos sin pagar comisiones ridículas. Todo en una app."*
+> **"Nunca más te pierdas un concierto que te habría encantado."**
 
-**Para el artista independiente / venue:**
-> *"Publica tu evento, vende boletos directamente a tu audiencia y quédate con lo que mereces. Sin gatekeepers, sin comisiones abusivas."*
+- Descubre conciertos a tu alrededor que no sabías que existían.
+- Compra en 3 taps, sin comisiones abusivas.
+- Tu agenda musical se arma sola según tu gusto.
 
-### Value Proposition Canvas (resumen)
+### Para artistas independientes
 
-| | Fan / Asistente | Artista / Venue |
-|---|---|---|
-| **Jobs-to-be-done** | Encontrar eventos que me gusten cerca. Comprar boletos fácil y barato. Planificar mi agenda cultural. | Llenar mi evento. Vender boletos sin perder margen. Llegar a audiencias nuevas. |
-| **Pains** | Fragmentación de info. Fees altos. Se entera tarde. Boletos falsos. | Invisibilidad. Comisiones 15-30%. Herramientas complejas/caras. Sin data de su audiencia. |
-| **Gains** | Descubrir artistas nuevos. Ahorrar dinero. Experiencia social (ir con amigos). | Más asistentes. Más ingreso neto. Data para tomar decisiones. Profesionalizar su marca. |
+> **"Publica, vende y llena tu show — sin pedirle permiso a nadie."**
 
-### Modelo de negocio
+- Crea tu evento y vende boletos en minutos.
+- Llega a fans reales que escuchan tu género y están cerca.
+- Comisiones justas (5-8%) y cobro directo.
 
-| Flujo de ingreso | Descripción | Target |
-|------------------|-------------|--------|
-| **Comisión por boleto** | 5-8% por transacción (vs. 15-30% de incumbentes) | Principal — escala con volumen |
-| **Promoción destacada** | Artistas/venues pagan por posicionamiento premium en el feed y mapa | Secundario — monetización de oferta |
-| **ConcertRadar Pro (artista)** | Suscripción mensual con analytics avanzados, herramientas de CRM de audiencia, y prioridad en discovery | Terciario — recurrente |
-| **Partnerships con marcas** | Patrocinio de experiencias in-app (ej: "Presentado por Spotify" / marcas de bebidas) | Futuro — post product-market fit |
+### Para venues / promotores
+
+> **"Llena tu espacio con la audiencia correcta."**
+
+- Visibilidad ante un público segmentado y activo.
+- Data de asistencia y comportamiento de compra.
 
 ---
 
 ## 5. KPIs
 
 ### North Star Metric
-
-> **Boletos comprados por mes a través de la plataforma**
->
-> Refleja simultáneamente: adopción del fan, valor para el artista/venue, y revenue directo.
+**Boletos vendidos por mes** — captura activación, retención y monetización en un solo indicador.
 
 ### KPIs por área
 
-#### Adquisición
-| KPI | Definición | Meta MVP (6 meses post-launch) |
-|-----|------------|-------------------------------|
-| Descargas totales | Instalaciones de la app | 100K |
-| CAC | Costo de adquisición por usuario registrado | < $1.50 USD |
-| Tasa de registro | Descargas → Registro completado | > 60% |
-| Artistas/venues registrados | Cuentas activas del lado oferta | 500+ |
-
-#### Activación
-| KPI | Definición | Meta MVP |
-|-----|------------|----------|
-| Onboarding completado | Usuario seleccionó ≥3 géneros + habilitó ubicación | > 70% de registrados |
-| Primer evento guardado | Usuario agregó un evento a su agenda en la primera sesión | > 40% |
-| Primer boleto comprado | Conversión a compra en los primeros 30 días | > 8% |
-
-#### Engagement
-| KPI | Definición | Meta MVP |
-|-----|------------|----------|
-| MAU / DAU ratio | Stickiness de la app | > 25% DAU/MAU |
-| Sesiones/semana por usuario activo | Frecuencia de uso | ≥ 2.5 |
-| Eventos vistos por sesión | Profundidad de descubrimiento | ≥ 4 |
-| Tasa de interacción con alertas push | Opens de notificaciones de eventos | > 12% |
-
-#### Revenue
-| KPI | Definición | Meta MVP |
-|-----|------------|----------|
-| GMV (Gross Merchandise Value) | Valor total de boletos vendidos | $500K USD |
-| Revenue neto | Comisiones cobradas | $35K USD |
-| Ticket promedio | Precio medio del boleto vendido | $15-25 USD |
-| Boletos/mes | North star metric | 5,000+ en mes 6 |
-
-#### Retención
-| KPI | Definición | Meta MVP |
-|-----|------------|----------|
-| Retención D7 | % usuarios que regresan a los 7 días | > 35% |
-| Retención D30 | % usuarios que regresan a los 30 días | > 20% |
-| Repeat purchase rate | % de compradores que compran un segundo boleto | > 25% en 90 días |
-| Churn de artistas | % de artistas que dejan de publicar eventos | < 15% mensual |
+| Área | Métrica | Target MVP (6 meses) |
+|---|---|---|
+| **Adquisición** | Descargas totales | 50,000 |
+| **Adquisición** | CAC (Costo de Adquisición) | < $1.50 USD |
+| **Activación** | % usuarios que completan perfil musical | > 60% |
+| **Activación** | % usuarios que guardan ≥1 evento en semana 1 | > 35% |
+| **Engagement** | MAU / Descargas (tasa de actividad mensual) | > 40% |
+| **Engagement** | Eventos vistos por sesión | > 3 |
+| **Transacción** | Conversión vista-evento → compra | > 4% |
+| **Transacción** | Boletos vendidos / mes | 5,000 (mes 6) |
+| **Retención** | Retención D30 | > 25% |
+| **Monetización** | GMV (Gross Merchandise Value) mensual | $75,000 USD (mes 6) |
+| **Oferta** | Eventos activos en plataforma / mes | > 400 |
+| **Oferta** | Artistas independientes registrados | > 300 |
+| **NPS** | Net Promoter Score fans | > 50 |
+| **NPS** | Net Promoter Score artistas | > 55 |
 
 ---
 
 ## 6. Roadmap MVP
 
-### Principios del MVP
+### Fase 0 — Validación (Semanas 1-4)
+> **Objetivo:** Confirmar demanda antes de escribir una línea de código.
 
-1. **Primero descubrimiento, luego transacción.** Si el usuario no encuentra eventos relevantes, no hay compra.
-2. **Supply antes que demand.** Sin eventos listados, la app está vacía. Priorizar onboarding de artistas/venues.
-3. **Un país primero.** Lanzar en Colombia como mercado piloto antes de expandir.
-4. **Mobile-first, web-second.** La experiencia core es móvil; el panel de artista puede ser web responsive.
+| Entregable | Detalle |
+|---|---|
+| Landing page + waitlist | Segmentada por ciudad (Bogotá, CDMX, Buenos Aires, Santiago). Meta: 2,000 registros. |
+| Entrevistas de descubrimiento | 30 fans + 15 artistas independientes. Validar dolor, disposición a pagar, flujos actuales. |
+| Mapeo de oferta | Inventario manual de venues underground y calendarios de eventos en las 4 ciudades. |
+| Definición de partnerships | Contacto inicial con 10 venues y 20 artistas indie por ciudad para supply del MVP. |
 
-### Fases
+**Go / No-Go:** ≥1,500 registros en waitlist Y validación cualitativa del dolor en ≥80% de entrevistas.
 
-```
-  FASE 0          FASE 1            FASE 2              FASE 3
-  PRE-MVP         MVP               CRECIMIENTO         ESCALA
-  
-  Sem 1-4         Sem 5-14          Sem 
+---
+
+### Fase 1 — MVP Core (Semanas 5-14)
+> **Objetivo:** Lanzar en **1 ciudad** (Bogotá) con el loop completo: descubrir → guardar → comprar.
+
+| Feature | Prioridad | Descripción |
+|---|---|---|
+| Onboarding musical | P0 | Selección de géneros + conexión opcional Spotify para semilla de gustos. |
+| Mapa Radar | P0 | Vista de mapa con eventos geolocalizados. Filtros: género, fecha, precio, distancia. |
+| Feed personalizado | P0 | Lista de eventos recomendados basada en perfil musical + ubicación. |
+| Detalle de evento | P0 | Info completa: artista, venue, fecha, precio, mapa, fotos, enlace a música. |
+| Agenda personal | P0 | Guardar eventos + notificaciones (recordatorio 24h antes, sold-out alert). |
+| Checkout + boleto QR | P0 | Pasarela de pago (PSE + tarjeta vía Stripe/Wompi). Boleto digital con QR único. |
+| Portal artista básico | P0 | Registro, crear evento, fijar precio, ver ventas en tiempo real. |
+| Validador QR (venue) | P1 | App mínima o web para que el venue escanee y valide boletos en puerta. |
+| Auth + perfil usuario | P0 | Registro email / Google / Apple. |
+| Analytics artista | P1 | Dashboard: boletos vendidos, ingresos, demografía básica de compradores. |
+
+**Stack sugerido:** React Native (cross-platform) · Node.js/Python backend · PostgreSQL + PostGIS · Stripe / Wompi pagos · Firebase push notifications · Mapbox o Google Maps SDK.
+
+**Equipo mínimo:** 2 mobile devs, 1 backend dev, 1 diseñador producto, 1 PM, 1 ops/partnerships (part-time).
+
+---
+
+### Fase 2 — Iteración + Segunda ciudad (Semanas 15-22)
+> **Objetivo:** Iterar con datos reales de Bogotá, lanzar en CDMX.
+
+| Feature / Acción | Prioridad | Descripción |
+|---|---|---|
+| Motor de recomendación v2 | P0 | Incorporar señales de comportamiento (eventos vistos, comprados, guardados) al algoritmo. |
+| Integración Spotify/Apple Music | P1 | Importar artistas top del usuario para mejorar recomendaciones automáticamente. |
+| Social proof | P1 | "X amigos van a este evento" (conexión contactos opcional). |
+| Notificaciones inteligentes | P1 | "Artista que escuchas tocará a 3km" / "Últimos boletos para [evento guardado]". |
+| Reviews post-evento | P2 | Rating del evento para alimentar calidad de recomendaciones. |
+| Expansión CDMX | P0 | Replicar playbook de partnerships + onboarding de venues y artistas. |
+| Pasarela OXXO | P0 | Pago en efectivo para México (crítico para conversión). |
+
+---
+
+### Fase 3 — Escala + Monetización (Semanas 23-30)
+> **Objetivo:** 4 ciudades activas, modelo de monetización validado.
+
+| Feature / Acción | Prioridad |
+|---|---|
+| Expansión Buenos Aires + Santiago | P0 |
+| Mercado Pago como pasarela (AR) | P0 |
+| Promoted Events (artistas/venues pagan por visibilidad) | P1 |
+| Planes premium artistas (analytics avanzados, badges verificados) | P2 |
+| Anti-scalping (boleto intransferible vinculado a identidad) | P1 |
+| API para venues (sincronizar calendario propio con ConcertRadar) | P2 |
+| Programa de embajadores (influencers de escena local por ciudad) | P1 |
+
+---
+
+## Modelo de Monetización
+
+| Fuente | Descripción | Target |
+|---|---|---|
+| **Comisión por boleto** | 5-8% sobre precio de venta (cobra al comprador o split con artista) | 70% del revenue |
+| **Promoted Events** | Artistas/venues pagan por posicionamiento destacado en Radar y Feed | 20% del revenue |
+| **Planes artista Pro** | Suscripción mensual para analytics avanzados, herramientas de CRM, prioridad en recomendaciones | 10% del revenue |
+
+---
+
+## Riesgos y Mitigaciones
+
+| Riesgo | Impacto | Probabilidad | Mitigación |
+|---|---|---|---|
+| **Supply insuficiente** (pocos eventos listados) | Alto | Alta | Curación manual inicial, partnerships con venues, equipo de ops dedicado por ciudad. Onboarding white-glove para primeros 50 artistas. |
+| **Cold start de recomendaciones** | Medio | Alta | Onboarding musical robusto + curación editorial ("Lo mejor esta semana en Bogotá"). |
+| **Regulación de ticketing** por país | Medio | Media | Due diligence legal por mercado antes de lanzar. Estructura de comisiones adaptable. |
+| **Fraude / boletos falsos** | Alto | Baja | QR dinámico vinculado a cuenta, boleto intransferible en MVP. |
+| **Competidor grande copia el modelo** | Medio | Media | Velocidad de ejecución + profundidad en underground (moat de comunidad y supply difícil de replicar). |
+| **Dependencia de pasarelas de pago** | Medio | Baja | Integrar ≥2 pasarelas por mercado desde fase 2. |
+
+---
+
+## Criterios de Éxito del MVP (Mes 6 — Go / No-Go para Serie Seed)
+
+| Criterio | Umbral mínimo |
+|---|---|
+| Boletos vendidos acumulados | ≥ 15,000 |
+| Artistas independientes activos (≥1 evento publicado) | ≥ 150 |
+| Retención D30 | ≥ 25% |
+| NPS fans | ≥ 45 |
+| GMV acumulado | ≥ $200,000 USD |
+| Ciudades operativas | ≥ 2 |
+
+---
+
+*Documento vivo. Última actualización: junio 2025. Owner: Product Lead, ConcertRadar.*
