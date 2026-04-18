@@ -1,184 +1,182 @@
 
 
-# Sitemap — ConcertRadar
+# ConcertRadar — Sitemap Completo
 
 ---
 
-## 1. Onboarding & Autenticación
+## Principios de organización
 
-- ⭐ Splash / Welcome Screen
-- ⭐ Registro (email, Google, Apple)
-- ⭐ Login
-- Recuperar contraseña
-- ⭐ Onboarding — Perfil musical
-  - Conectar Spotify / Apple Music
-  - Selección manual de géneros
-  - Selección de ciudad principal
-- Permisos (ubicación, notificaciones)
-
----
-
-## 2. Radar (Home / Mapa)
-
-- ⭐ Mapa interactivo de conciertos cercanos
-  - Pin / Marker de evento (preview card)
-- ⭐ Filtros de búsqueda (género, fecha, precio, tipo mainstream/underground, distancia)
-- ⭐ Vista lista alternativa (toggle mapa ↔ lista)
-- Cambiar ubicación manualmente
-
----
-
-## 3. Explorar / Descubrir
-
-- ⭐ Feed personalizado "Para ti" (basado en perfil musical)
-- ⭐ Eventos destacados / trending en tu ciudad
-- Eventos por género (browsing por categoría)
-- Eventos por venue
-- Artistas en tendencia local
-- Sección "Recién añadidos"
-- Calendario mensual de eventos
-
----
-
-## 4. Detalle de Evento
-
-- ⭐ Info del evento (nombre, artista, fecha, hora, venue, precio)
-- ⭐ Ubicación del venue en mapa + cómo llegar
-- ⭐ Botón "Comprar boleto"
-- ⭐ Botón "Guardar / Favorito"
-- Lineup completo (si aplica)
-- Descripción y reglas del evento
-- Galería de fotos / flyer
-- Compartir evento (redes, WhatsApp, link)
-- Eventos similares recomendados
-- Reseñas / valoraciones de ediciones anteriores
-- Contador de asistentes / amigos que van
-
----
-
-## 5. Compra de Boletos
-
-- ⭐ Selección de tipo de boleto (general, VIP, early bird)
-- ⭐ Selección de cantidad
-- ⭐ Resumen de orden (desglose de precio + comisión transparente)
-- ⭐ Pasarela de pago (tarjeta, PSE, Nequi, Mercado Pago, OXXO según país)
-- Aplicar código de descuento / promo
-- ⭐ Confirmación de compra
-- Enviar boleto a otro contacto (regalo)
-
----
-
-## 6. Mis Boletos
-
-- ⭐ Lista de boletos activos (próximos eventos)
-- ⭐ Detalle de boleto / QR de acceso
-- Boletos pasados (historial)
-- Agregar evento al calendario del dispositivo
-- Boleto transferido / recibido
-
----
-
-## 7. Búsqueda
-
-- ⭐ Búsqueda global (eventos, artistas, venues, géneros)
-- Resultados con filtros activos
-- Búsquedas recientes
-- Sugerencias de autocompletado
-
----
-
-## 8. Notificaciones
-
-- ⭐ Centro de notificaciones
-  - Nuevos eventos de artistas que sigues
-  - Recordatorios de eventos guardados
-  - Alertas de precio / boletos a punto de agotarse
-  - Confirmaciones de compra
-- Configuración de preferencias de notificación
-
----
-
-## 9. Perfil de Artista
-
-- ⭐ Bio, foto, géneros
-- ⭐ Próximos eventos del artista
-- Eventos pasados
-- ⭐ Botón "Seguir artista"
-- Links a Spotify / Apple Music / redes sociales
-- Fans / seguidores en la plataforma
-
----
-
-## 10. Perfil de Venue
-
-- Foto, descripción, capacidad
-- Dirección + mapa
-- Próximos eventos en este venue
-- Reseñas del venue
-- Contacto / redes del venue
-
----
-
-## 11. Perfil de Usuario (Mi Cuenta)
-
-- ⭐ Datos personales (nombre, email, ciudad, foto)
-- ⭐ Mi perfil musical (géneros favoritos, artistas seguidos)
-- Historial de eventos asistidos
-- Eventos guardados / favoritos
-- Amigos / conexiones en la app
-- Métodos de pago guardados
-- Configuración general
-  - Idioma
-  - Preferencias de notificación
-  - Privacidad
-  - Permisos de ubicación
-- ⭐ Cerrar sesión
-- Eliminar cuenta
-
----
-
-## 12. Panel de Artista / Organizador (Portal)
-
-- ⭐ Registro como artista / organizador
-- ⭐ Crear evento (nombre, fecha, venue, precio, flyer, descripción, género)
-- ⭐ Gestión de eventos (editar, cancelar, duplicar)
-- ⭐ Dashboard de ventas (boletos vendidos, ingresos, comisiones)
-- Analytics de audiencia (demografía, géneros, ubicación de compradores)
-- Herramientas de promoción (compartir, código descuento)
-- Gestión de accesos / check-in con QR
-- Historial de pagos / retiros
-- Soporte para organizadores
-
----
-
-## 13. Social / Comunidad
-
-- Actividad de amigos (quién va a qué evento)
-- Invitar amigos a un evento
-- Compartir perfil musical
-- Feed social de actividad local
-
----
-
-## 14. Soporte & Legal
-
-- ⭐ Centro de ayuda / FAQ
-- ⭐ Contacto / Soporte (chat o formulario)
-- Reportar un problema con un evento
-- Solicitar reembolso
-- Términos y condiciones
-- Política de privacidad
-- Sobre ConcertRadar
-
----
-
-## Leyenda
-
-| Símbolo | Significado |
+| Criterio | Decisión |
 |---|---|
-| ⭐ | Pantalla incluida en el MVP (v1.0) |
-| Sin símbolo | Pantalla post-MVP (v1.x / v2.0) |
+| **Modelo mental del usuario** | Flujo circular: Descubrir → Evaluar → Comprar → Asistir → Redescubrir |
+| **Navegación principal** | Tab bar con 5 secciones raíz (patrón estándar móvil) |
+| **Criterio MVP (⭐)** | Pantallas necesarias para cerrar el loop mínimo: descubrir un evento cercano y comprar boleto |
+| **Profundidad máxima** | 2 niveles desde cualquier tab (regla de 3 taps al contenido) |
 
 ---
 
-*Total: 14 secciones · ~70 pantallas únicas · ~35 pantallas MVP*
+## Mapa del sitio
+
+### 1. Explorar (Tab principal — Home)
+
+- ⭐ 1.1 Feed de eventos cercanos (mapa + lista, geolocalización automática)
+- ⭐ 1.2 Detalle de evento
+  - 1.2.1 Galería multimedia (fotos, videos, playlist)
+  - ⭐ 1.2.2 Info del venue (ubicación, capacidad, cómo llegar)
+  - ⭐ 1.2.3 Selección de boletos y precios
+  - 1.2.4 Eventos relacionados ("Si te gusta esto…")
+  - 1.2.5 Reseñas y asistentes confirmados
+- ⭐ 1.3 Filtros y ordenamiento
+  - ⭐ 1.3.1 Por género musical (incluyendo subgéneros underground)
+  - ⭐ 1.3.2 Por fecha / rango de fechas
+  - ⭐ 1.3.3 Por distancia / zona
+  - 1.3.4 Por rango de precio
+  - 1.3.5 Por tipo de venue (bar, arena, centro cultural, casa de conciertos)
+- 1.4 Vista de mapa expandido (exploración geográfica)
+
+---
+
+### 2. Búsqueda
+
+- ⭐ 2.1 Barra de búsqueda global (artistas, eventos, venues, géneros)
+- ⭐ 2.2 Resultados de búsqueda (agrupados por categoría)
+- 2.3 Búsquedas recientes y sugeridas
+- 2.4 Búsqueda por fecha específica ("¿Qué hay este viernes?")
+- ⭐ 2.5 Perfil de artista
+  - ⭐ 2.5.1 Próximos eventos del artista
+  - 2.5.2 Bio, discografía y links de streaming
+  - ⭐ 2.5.3 Botón de seguir artista
+- 2.6 Perfil de venue
+  - 2.6.1 Calendario del venue
+  - 2.6.2 Info práctica (dirección, horarios, políticas)
+  - 2.6.3 Fotos y reseñas del lugar
+
+---
+
+### 3. Mis Boletos
+
+- ⭐ 3.1 Boletos activos (próximos eventos)
+  - ⭐ 3.1.1 Detalle de boleto (QR / código de entrada)
+  - 3.1.2 Agregar a calendario del dispositivo
+  - 3.1.3 Compartir boleto / invitar amigos
+  - ⭐ 3.1.4 Indicaciones para llegar al venue
+- 3.2 Historial de eventos asistidos
+  - 3.2.1 Dejar reseña del evento
+  - 3.2.2 Ver fotos del evento (post-evento)
+- 3.3 Boletos transferidos / recibidos
+- ⭐ 3.4 Descargar boleto offline (wallet / PDF)
+
+---
+
+### 4. Para Ti (Personalización)
+
+- ⭐ 4.1 Recomendaciones personalizadas por gustos musicales
+- ⭐ 4.2 Alertas de artistas seguidos ("Artista X viene a tu ciudad")
+- 4.3 Eventos populares en tu zona
+- 4.4 Amigos que asistirán (integración social)
+- 4.5 Radar semanal (digest de eventos nuevos para ti)
+- 4.6 Descubrimiento por mood / momento ("Algo tranquilo hoy", "Fiesta este sábado")
+
+---
+
+### 5. Perfil y Configuración
+
+- ⭐ 5.1 Mi perfil
+  - ⭐ 5.1.1 Datos personales
+  - ⭐ 5.1.2 Géneros e intereses musicales (onboarding y edición)
+  - 5.1.3 Artistas y venues seguidos
+  - 5.1.4 Estadísticas personales (eventos asistidos, géneros, ciudades)
+- ⭐ 5.2 Métodos de pago
+  - ⭐ 5.2.1 Agregar / editar tarjeta
+  - 5.2.2 Otros métodos (PSE, OXXO, Mercado Pago, según país)
+- 5.3 Notificaciones
+  - 5.3.1 Preferencias de alertas (artistas, precio, cercanía)
+  - 5.3.2 Frecuencia y canales (push, email)
+- 5.4 Configuración general
+  - 5.4.1 Idioma y región
+  - 5.4.2 Permisos de ubicación
+  - 5.4.3 Privacidad y datos
+  - 5.4.4 Tema (claro / oscuro)
+- 5.5 Centro de ayuda y soporte
+  - 5.5.1 FAQs
+  - 5.5.2 Chat de soporte
+  - 5.5.3 Reportar un problema con boleto
+- 5.6 Legal
+  - 5.6.1 Términos y condiciones
+  - 5.6.2 Política de privacidad
+  - 5.6.3 Política de reembolsos
+- ⭐ 5.7 Cerrar sesión / eliminar cuenta
+
+---
+
+### 6. Flujo de Compra (transversal — se accede desde cualquier detalle de evento)
+
+- ⭐ 6.1 Selección de tipo y cantidad de boletos
+- ⭐ 6.2 Resumen de orden (desglose de precio + comisión transparente)
+- ⭐ 6.3 Selección / confirmación de método de pago
+- ⭐ 6.4 Confirmación de compra exitosa
+  - ⭐ 6.4.1 Boleto generado (QR)
+  - 6.4.2 Compartir compra
+  - 6.4.3 Agregar a calendario
+- 6.5 Error de pago / reintentar
+
+---
+
+### 7. Onboarding (flujo inicial — una sola vez)
+
+- ⭐ 7.1 Pantallas de bienvenida (propuesta de valor, 3 slides)
+- ⭐ 7.2 Registro / Login (email, Google, Apple)
+- ⭐ 7.3 Permiso de ubicación
+- ⭐ 7.4 Selección de géneros musicales favoritos
+- 7.5 Conectar con Spotify / Apple Music (importar gustos)
+- 7.6 Seguir artistas sugeridos
+
+---
+
+### 8. Portal de Artistas / Promotores (flujo secundario)
+
+- 8.1 Registro como organizador
+- 8.2 Dashboard del organizador
+  - 8.2.1 Crear evento
+  - 8.2.2 Configurar boletos y precios
+  - 8.2.3 Métricas de ventas en tiempo real
+  - 8.2.4 Lista de asistentes / check-in
+- 8.3 Gestión de perfil de artista / venue
+- 8.4 Historial de pagos y liquidaciones
+- 8.5 Soporte para organizadores
+
+---
+
+## Resumen cuantitativo
+
+| Métrica | Total | MVP (⭐) |
+|---|---|---|
+| **Secciones raíz** | 8 | 5 (tabs) + 2 flujos transversales |
+| **Pantallas totales** | 68 | 30 |
+| **Taps máximos al contenido clave** | 3 | 2 |
+
+---
+
+## Mapa visual de navegación principal
+
+```
+┌──────────────────────────────────────────────────┐
+│                   Tab Bar                         │
+├──────────┬──────────┬──────────┬────────┬────────┤
+│ Explorar │ Búsqueda │  Boletos │Para Ti │ Perfil │
+│  (Home)  │          │          │        │        │
+└────┬─────┴────┬─────┴────┬─────┴───┬────┴───┬────┘
+     │          │          │         │        │
+     ▼          ▼          ▼         ▼        ▼
+   Feed +    Buscar     Boletos   Recos    Config
+   Mapa     artista/    activos/  person.  pagos
+   Filtros   venue/     historial alertas  gustos
+     │       género        │
+     ▼                     ▼
+  Detalle ──────────► Flujo de ──► Boleto
+  Evento               Compra      generado
+```
+
+---
+
+> **Nota para diseño:** Las secciones 7 (Onboarding) y 8 (Portal de artistas) viven fuera de la navegación principal por tabs. El onboarding es un flujo lineal pre-autenticación. El portal de artistas es un modo alternativo de la app accesible desde Perfil.
