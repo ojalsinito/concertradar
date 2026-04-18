@@ -1,77 +1,85 @@
 ## PARTE 1 — USER STORIES
-
-### US-01: Configuración de Perfil Musical
-Como Valentina Restrepo, quiero seleccionar mis géneros favoritos para recibir recomendaciones de conciertos personalizadas.
+### Flujo 1: Descubrimiento de Eventos Cercanos
+**US-01: Descubrir eventos cercanos relevantes**
+Como Valentina Restrepo, quiero ver eventos musicales cerca de mi ubicación que coincidan con mis gustos musicales para que pueda asistir a conciertos de mi interés.
 **Criterios de aceptación:**
-- [ ] La aplicación ofrece una lista de géneros musicales para seleccionar.
-- [ ] El usuario puede seleccionar al menos 3 géneros favoritos.
-- [ ] La aplicación guarda las preferencias del usuario para futuras sugerencias.
+- [ ] La app muestra eventos en un radio de 10 km desde la ubicación del usuario.
+- [ ] Los eventos se filtran por género musical.
+- [ ] La lista de eventos incluye información como nombre del evento, artista, venue, fecha, distancia y precio.
 **Prioridad:** Alta | **Estimación:** M
 
-### US-02: Registro y Autenticación
-Como Valentina Restrepo, quiero registrarme y autenticarme en la aplicación para acceder a contenido exclusivo y comprar boletos de manera segura.
+**US-02: Aplicar filtros de búsqueda**
+Como Valentina Restrepo, quiero aplicar filtros de búsqueda por género musical para encontrar eventos específicos de post-punk y shoegaze para satisfacer mis gustos musicales.
 **Criterios de aceptación:**
-- [ ] La aplicación ofrece métodos de registro como Google, Apple y correo electrónico.
-- [ ] El usuario puede completar su registro y verificar su correo electrónico.
-- [ ] La aplicación autentica al usuario y lo redirige a la pantalla de inicio.
-**Prioridad:** Alta | **Estimación:** L
-
-### US-03: Búsqueda de Conciertos
-Como Valentina Restrepo, quiero buscar conciertos en vivo cerca de mi ubicación y filtrar por género musical para encontrar eventos que me gusten.
-**Criterios de aceptación:**
-- [ ] La aplicación permite al usuario buscar conciertos por ubicación y género musical.
-- [ ] La aplicación muestra una lista de conciertos que coinciden con los criterios de búsqueda.
-- [ ] El usuario puede filtrar la lista de conciertos por fecha y distancia.
-**Prioridad:** Alta | **Estimación:** L
-
-### US-04: Compra de Boletos
-Como Valentina Restrepo, quiero comprar boletos de conciertos de manera segura y sin comisiones abusivas para apoyar a artistas independientes.
-**Criterios de aceptación:**
-- [ ] La aplicación ofrece un proceso de compra de boletos seguro y transparente.
-- [ ] El usuario puede pagar con diferentes métodos de pago.
-- [ ] La aplicación garantiza la autenticidad de los boletos y emite un comprobante de compra.
+- [ ] La app permite al usuario seleccionar múltiples géneros musicales para filtrar eventos.
+- [ ] Los eventos se actualizan en tiempo real según los filtros aplicados.
+- [ ] La app muestra una indicación clara de los filtros actuales aplicados.
 **Prioridad:** Alta | **Estimación:** M
 
-### US-05: Descubrimiento de Nuevos Artistas
-Como Valentina Restrepo, quiero descubrir nuevos artistas y géneros musicales a través de recomendaciones personalizadas para ampliar mi gusto musical.
+**US-03: Ver detalles del evento**
+Como Valentina Restrepo, quiero ver los detalles de un evento específico, como la descripción del evento, la biografía del artista y las opciones de compra de boletos, para decidir si asistir o no al evento.
 **Criterios de aceptación:**
-- [ ] La aplicación ofrece recomendaciones de artistas y géneros musicales basadas en las preferencias del usuario.
-- [ ] El usuario puede explorar perfiles de artistas y escuchar muestras de su música.
-- [ ] La aplicación sugiere conciertos de artistas que podrían gustar al usuario.
+- [ ] La app muestra una pantalla de detalles del evento con información completa.
+- [ ] La pantalla de detalles incluye enlaces para comprar boletos directamente.
+- [ ] La app proporciona una opción para compartir el evento en redes sociales.
+**Prioridad:** Media | **Estimación:** L
+
+### Flujo 2: Compra de Boletos
+**US-04: Comprar boletos de eventos**
+Como Valentina Restrepo, quiero comprar boletos para eventos de manera segura y directa para evitar intermediarios y asegurarme de que mi dinero llegue a los artistas.
+**Criterios de aceptación:**
+- [ ] La app ofrece un proceso de compra de boletos integrado y seguro.
+- [ ] El usuario puede pagar con各种 métodos de pago.
+- [ ] La app envía un correo electrónico de confirmación con los detalles del boleto después de la compra.
+**Prioridad:** Alta | **Estimación:** L
+
+**US-05: Verificar disponibilidad de boletos**
+Como Valentina Restrepo, quiero verificar la disponibilidad de boletos para un evento específico para planificar con anticipación y asegurarme de obtener boletos.
+**Criterios de aceptación:**
+- [ ] La app muestra la cantidad de boletos disponibles para cada evento.
+- [ ] El sistema actualiza en tiempo real la disponibilidad de boletos.
+- [ ] La app notifica al usuario si los boletos se agotan o si hay una espera para comprar boletos.
+**Prioridad:** Media | **Estimación:** M
+
+**US-06: Recibir notificaciones de eventos**
+Como Valentina Restrepo, quiero recibir notificaciones sobre eventos próximos y actualizaciones de eventos que me interesan para estar al tanto y no perderme conciertos.
+**Criterios de aceptación:**
+- [ ] La app permite al usuario suscribirse a notificaciones push para eventos específicos.
+- [ ] El sistema envía notificaciones push con anticipación a los eventos.
+- [ ] La app ofrece una opción para personalizar las preferencias de notificación.
 **Prioridad:** Media | **Estimación:** M
 
 ## PARTE 2 — CASOS DE USO
-
-### CU-01: Registro y Configuración de Perfil Musical
+### CU-01: Descubrir y comprar boletos para un concierto
 - **Actor principal:** Valentina Restrepo
-- **Precondición:** La aplicación está instalada y el usuario tiene acceso a internet.
+- **Precondición:** La app tiene acceso a la ubicación del usuario y el usuario tiene una cuenta en la app.
 - **Flujo principal:**
-  1. El usuario abre la aplicación y selecciona registrar su cuenta.
-  2. El usuario completa su registro y verifica su correo electrónico.
-  3. El usuario selecciona sus géneros favoritos y conecta su servicio de streaming musical (opcional).
-  4. La aplicación guarda las preferencias del usuario y lo redirige a la pantalla de inicio.
-- **Flujo alternativo:** Si el usuario no puede verificar su correo electrónico, la aplicación le permite reenviar el código de verificación.
-- **Postcondición:** El usuario tiene una cuenta configurada y puede acceder a contenido personalizado.
+  1. Valentina abre la app y concede permiso de ubicación.
+  2. La app muestra eventos cercanos en un radio de 10 km.
+  3. Valentina aplica filtros por género musical (post-punk y shoegaze).
+  4. La app muestra una lista de eventos que coinciden con los filtros.
+  5. Valentina selecciona un evento y ve los detalles.
+  6. Valentina compra boletos para el evento a través de la app.
+- **Flujo alternativo:** Si no hay eventos disponibles que coincidan con los filtros, la app sugiere eventos similares o notifica al usuario sobre eventos próximos que podrían interesarle.
+- **Postcondición:** Valentina ha comprado boletos para un concierto que coinside con sus gustos musicales y ha recibido un correo electrónico de confirmación.
 
-### CU-02: Búsqueda y Compra de Conciertos
+### CU-02: Compartir un evento en redes sociales
 - **Actor principal:** Valentina Restrepo
-- **Precondición:** El usuario tiene una cuenta configurada y está conectado a internet.
+- **Precondición:** Valentina tiene una cuenta en la app y ha encontrado un evento que desea compartir.
 - **Flujo principal:**
-  1. El usuario abre la aplicación y selecciona buscar conciertos.
-  2. El usuario selecciona su ubicación y género musical preferido.
-  3. La aplicación muestra una lista de conciertos que coinciden con los criterios de búsqueda.
-  4. El usuario selecciona un concierto y compra boletos de manera segura.
-  5. La aplicación emite un comprobante de compra y lo guarda en la cuenta del usuario.
-- **Flujo alternativo:** Si no hay conciertos disponibles que coincidan con los criterios de búsqueda, la aplicación sugiere conciertos similares.
-- **Postcondición:** El usuario tiene boletos comprados y un comprobante de compra guardado en su cuenta.
+  1. Valentina selecciona un evento en la app.
+  2. Valentina elige la opción de compartir el evento.
+  3. La app muestra opciones para compartir en diferentes redes sociales (Instagram, Facebook, Twitter).
+  4. Valentina selecciona una red social y comparte el evento.
+- **Flujo alternativo:** Si la app no puede conectarse a las redes sociales del usuario, muestra un mensaje de error y sugiere soluciones alternativas para compartir el evento.
+- **Postcondición:** El evento ha sido compartido en la red social seleccionada por Valentina.
 
-### CU-03: Descubrimiento de Nuevos Artistas
+### CU-03: Recibir notificaciones de eventos
 - **Actor principal:** Valentina Restrepo
-- **Precondición:** El usuario tiene una cuenta configurada y está conectado a internet.
+- **Precondición:** Valentina tiene una cuenta en la app y ha suscrito notificaciones push para eventos específicos.
 - **Flujo principal:**
-  1. El usuario abre la aplicación y selecciona explorar nuevos artistas.
-  2. La aplicación muestra recomendaciones de artistas y géneros musicales basadas en las preferencias del usuario.
-  3. El usuario selecciona un artista y escucha muestras de su música.
-  4. La aplicación sugiere conciertos de artistas que podrían gustar al usuario.
-- **Flujo alternativo:** Si el usuario no encuentra artistas que le gusten, la aplicación le permite buscar por género musical o ubicación.
-- **Postcondición:** El usuario ha descubierto nuevos artistas y tiene recomendaciones de conciertos personalizadas.
+  1. La app detecta que un evento para el que Valentina se ha suscrito está próximo.
+  2. El sistema envía una notificación push a Valentina con los detalles del evento.
+  3. Valentina ve la notificación y decide si asistir o no al evento.
+- **Flujo alternativo:** Si la notificación push no se puede entregar, la app intenta enviar una notificación por correo electrónico o muestra la notificación dentro de la app la próxima vez que Valentina la abra.
+- **Postcondición:** Valentina ha recibido una notificación sobre un evento próximo que le interesa y puede planificar con anticipación.
