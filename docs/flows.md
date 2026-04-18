@@ -1,236 +1,186 @@
 
 
-# Flujos Principales — ConcertRadar
+# ConcertRadar — Flujos Principales de Usuario
 
 ---
 
-## Flujo 1: Onboarding y Configuración de Perfil Musical
+## Flujo 1: Descubrimiento de Eventos Cercanos
 
-**Actor:** Valentina Restrepo (usuario nuevo)
-**Objetivo:** Crear cuenta y configurar preferencias musicales para recibir recomendaciones relevantes.
-
----
+> **Actor:** Valentina Restrepo (melómana underground, Medellín)
+> **Objetivo:** Encontrar eventos relevantes cerca de su ubicación que coincidan con sus gustos musicales.
+> **Pantalla de entrada:** `1.1 Feed de eventos cercanos`
 
 ### Pasos
 
-| # | Acción del usuario | Pantalla | Componente clave |
+| # | Acción del usuario | Pantalla | Sistema responde |
 |---|---|---|---|
-| 1 | Abre la app por primera vez | `Splash / Welcome` | Carrusel de valor (3 slides) + CTA "Comenzar" |
-| 2 | Selecciona método de registro | `Registro` | Botones: Google · Apple · Email |
-| 3 | Completa datos básicos (si elige email) | `Registro — Formulario` | Campos: nombre, email, contraseña, confirmación |
-| 4 | Verifica email | `Verificación de correo` | Input código de 6 dígitos + "Reenviar código" |
-| 5 | Conecta servicio de streaming (opcional) | `Onboarding — Conectar música` | Botones Spotify / Apple Music + "Saltar" |
-| 6 | Selecciona géneros favoritos (mín. 3) | `Onboarding — Géneros` | Grid de chips seleccionables (shoegaze, math rock, cumbia experimental, etc.) |
-| 7 | Define ciudad principal | `Onboarding — Ciudad` | Buscador autocompletable + opción "Usar mi ubicación" |
-| 8 | Concede permisos del sistema | `Permisos` | Modales nativos: ubicación → notificaciones |
-| 9 | Visualiza confirmación | `Onboarding — Completo` | Resumen de perfil + CTA "Ir al Radar" |
+| 1 | Abre la app ConcertRadar | `Splash → 1.1 Feed de eventos cercanos` | Solicita permiso de geolocalización |
+| 2 | Concede permiso de ubicación | `1.1 Feed de eventos cercanos` | Detecta coordenadas y carga eventos en radio predeterminado (10 km). Muestra vista dual mapa + lista |
+| 3 | Observa el feed y hace scroll vertical por la lista | `1.1 Feed de eventos cercanos` | Carga progresiva (infinite scroll). Cada card muestra: nombre del evento, artista, venue, fecha, distancia, precio desde, género |
+| 4 | Aplica filtro por género → selecciona "Post-punk" y "Shoegaze" | `1.3.1 Filtros por género musical` (bottom sheet) | Filtra en tiempo real. Actualiza lista y pines en mapa. Muestra contador de resultados |
+| 5 | Aplica filtro por fecha → "Este fin de semana" | `1.3.2 Filtros por fecha` (bottom sheet) | Cruza filtro de género + fecha + ubicación. Actualiza resultados |
+| 6 | Toca una card de evento que le interesa | `1.1 → 1.2 Detalle de evento` | Navega al detalle con transición de expansión. Carga info completa del evento |
 
 ### Estados de error
 
-| Código | Condición | Pantalla | Comportamiento |
+| Código | Error | Pantalla | Mensaje / Acción |
 |---|---|---|---|
-| `ERR-01` | Email ya registrado | `Registro — Formulario` | Inline error bajo campo email: *"Este correo ya tiene cuenta. ¿Quieres iniciar sesión?"* con link a Login |
-| `ERR-02` | Contraseña débil (< 8 chars, sin número) | `Registro — Formulario` | Indicador de fortaleza en rojo + lista de requisitos no cumplidos |
-| `ERR-03` | Código de verificación incorrecto/expirado | `Verificación de correo` | Toast: *"Código inválido o expirado"* + botón "Reenviar" con countdown 60s |
-| `ERR-04` | Falla OAuth (Google/Apple) | `Registro` | Modal: *"No pudimos conectar con [servicio]. Intenta de nuevo o usa email."* |
-| `ERR-05` | Falla conexión con Spotify/Apple Music | `Onboarding — Conectar música` | Banner: *"No se pudo conectar. Puedes seleccionar géneros manualmente."* → avanza a paso 6 |
-| `ERR-06` | Menos de 3 géneros seleccionados al intentar avanzar | `Onboarding — Géneros` | CTA deshabilitado + hint: *"Selecciona al menos 3 géneros para personalizar tu radar"* |
-| `ERR-07` | Permiso de ubicación denegado | `Permisos` | Fallback a paso 7 (ciudad manual) + tooltip: *"Sin ubicación usaremos tu ciudad configurada"* |
-| `ERR-08` | Sin conexión a internet (cualquier paso) | Pantalla activa | Fullscreen state: ilustración offline + *"Sin conexión. Revisa tu red."* + botón "Reintentar" |
+| `E1.1` | **Geolocalización denegada** | `1.1 Feed` | Empty state: "Necesitamos tu ubicación para mostrarte eventos cercanos" + botón "Activar ubicación" + opción "Ingresar ciudad manualmente" |
+| `E1.2` | **Sin conexión a internet** | `1.1 Feed` | Banner persistente: "Sin conexión. Mostrando últimos eventos guardados" + caché local si existe |
+| `E1.3` | **Sin resultados con filtros activos** | `1.1 Feed` | Empty state contextual: "No hay eventos de Shoegaze este fin de semana cerca de ti" + CTA "Ampliar búsqueda" (sugiere quitar un filtro o ampliar radio) + CTA "Crear alerta" |
+| `E1.4` | **GPS impreciso / ubicación genérica** | `1.1 Feed` | Toast: "Ubicación aproximada. Los resultados pueden variar" + opción de ajustar pin en mapa manualmente |
+| `E1.5` | **Timeout de carga del feed** | `1.1 Feed` | Skeleton loading → tras 10s: "Algo salió mal al cargar eventos" + botón "Reintentar" |
 
 ### Estado de éxito
 
-> ✅ **Perfil creado y configurado.** Valentina llega al Radar (Home) con el mapa centrado en Medellín mostrando eventos filtrados por sus géneros (shoegaze, math rock, cumbia experimental). Recibe notificación de bienvenida: *"¡Listo! Encontramos 12 eventos cerca de ti esta semana."*
+> ✅ Valentina ve un feed personalizado de 12 eventos underground este fin de semana en Medellín, filtrados por sus géneros favoritos. Identifica un toque de post-punk en un bar a 2.3 km y toca la card para ver más detalles.
 
 ---
 
----
+## Flujo 2: Evaluación de un Evento (Detalle)
 
-## Flujo 2: Descubrimiento de Eventos en el Radar
-
-**Actor:** Valentina Restrepo (usuario autenticado)
-**Objetivo:** Encontrar conciertos underground de sus géneros favoritos cerca de su ubicación actual.
-
----
+> **Actor:** Valentina Restrepo
+> **Objetivo:** Obtener toda la información necesaria para decidir si asistir y comprar boleto.
+> **Pantalla de entrada:** `1.2 Detalle de evento`
 
 ### Pasos
 
-| # | Acción del usuario | Pantalla | Componente clave |
+| # | Acción del usuario | Pantalla | Sistema responde |
 |---|---|---|---|
-| 1 | Abre la app (ya logueada) | `Radar (Home / Mapa)` | Mapa centrado en ubicación actual con pins de eventos |
-| 2 | Observa los pins en el mapa | `Radar — Mapa` | Pins codificados por color según género; badge de precio en cada pin |
-| 3 | Abre panel de filtros | `Radar — Filtros` | Bottom sheet: género, rango de fecha, precio (slider min-max), tipo (mainstream/underground), distancia |
-| 4 | Aplica filtros: underground + shoegaze + esta semana + < $50.000 COP | `Radar — Filtros` | Chips activos + CTA "Aplicar filtros (N resultados)" con preview de cantidad |
-| 5 | Visualiza resultados filtrados en mapa | `Radar — Mapa (filtrado)` | Mapa actualizado; badge "3 eventos" + botón "Limpiar filtros" |
-| 6 | Cambia a vista lista (toggle) | `Radar — Vista Lista` | Cards ordenables: por distancia · por fecha · por precio |
-| 7 | Toca un pin o card de evento | `Radar → Preview Card` | Bottom card: nombre, artista, fecha, venue, precio, distancia + CTA "Ver detalle" |
-| 8 | Navega al detalle del evento | `Detalle de Evento` | Pantalla completa del evento (→ Flujo 4) |
+| 1 | Visualiza la cabecera del evento | `1.2 Detalle de evento` | Muestra: imagen/video hero, nombre del evento, artista(s), fecha y hora, venue, precio desde, etiquetas de género, contador de asistentes confirmados |
+| 2 | Hace scroll para leer descripción y line-up completo | `1.2 Detalle de evento` (sección descripción) | Muestra descripción del evento, line-up con horarios por artista, links a playlists de cada artista (Spotify/Apple Music embed) |
+| 3 | Toca "Cómo llegar" en la sección de venue | `1.2.2 Info del venue` | Abre ficha del venue: dirección, mapa interactivo, opciones de transporte (metro, bus, taxi estimado), fotos del lugar, capacidad, accesibilidad |
+| 4 | Revisa galería multimedia | `1.2.1 Galería multimedia` | Carousel de fotos/videos de ediciones anteriores o del artista. Playlist embebida del artista |
+| 5 | Lee reseñas de asistentes a ediciones anteriores | `1.2.5 Reseñas y asistentes confirmados` | Lista de reseñas con rating, texto y fecha. Avatares de amigos / personas que sigue que asistirán. Contador: "23 personas irán" |
+| 6 | Toca botón "Ver boletos" (CTA sticky en footer) | `1.2 → 1.2.3 Selección de boletos` | Navega a pantalla de selección de boletos y precios |
 
 ### Estados de error
 
-| Código | Condición | Pantalla | Comportamiento |
+| Código | Error | Pantalla | Mensaje / Acción |
 |---|---|---|---|
-| `ERR-09` | GPS no disponible / permisos revocados | `Radar — Mapa` | Banner superior: *"No podemos acceder a tu ubicación"* + botón "Configurar" (abre settings) + fallback a ciudad del perfil |
-| `ERR-10` | Filtros sin resultados | `Radar — Mapa (filtrado)` | Empty state en mapa: *"No encontramos eventos con estos filtros en tu zona"* + sugerencias: "Ampliar distancia" · "Cambiar fechas" · "Explorar todos los géneros" |
-| `ERR-11` | Error cargando eventos (API timeout) | `Radar — Mapa` | Skeleton loaders → tras 10s: *"No pudimos cargar los eventos. Revisa tu conexión."* + botón "Reintentar" |
-| `ERR-12` | Evento del pin ya cancelado/eliminado | `Preview Card` | Card con estado: *"Este evento fue cancelado"* con opción "Ver similares" |
-| `ERR-13` | Cambio manual de ubicación — ciudad no encontrada | `Cambiar ubicación` | Inline en buscador: *"No encontramos esa ciudad. Prueba con otro nombre."* |
-| `ERR-14` | Sin conexión al hacer scroll/zoom en mapa | `Radar — Mapa` | Tiles del mapa en caché + banner: *"Estás offline. Mostrando últimos datos guardados."* |
+| `E2.1` | **Evento cancelado o pospuesto** | `1.2 Detalle de evento` | Banner rojo prominente: "Este evento fue cancelado el [fecha]" o "Pospuesto — nueva fecha: [fecha]". CTA: "Ver política de reembolso" si ya compró |
+| `E2.2` | **Evento agotado (sold out)** | `1.2 Detalle de evento` | Badge "AGOTADO" sobre imagen hero. CTA primario cambia a "Unirme a lista de espera" + CTA secundario "Crear alerta para eventos similares" |
+| `E2.3` | **Contenido multimedia no disponible** | `1.2.1 Galería multimedia` | Placeholder: "Contenido no disponible temporalmente" con ícono ilustrativo. No bloquea el flujo |
+| `E2.4` | **Venue sin información de transporte** | `1.2.2 Info del venue` | Muestra solo mapa + dirección. Enlace a Google/Apple Maps como fallback: "Abrir en Maps para indicaciones" |
+| `E2.5` | **Detalle no carga (error de servidor)** | `1.2 Detalle de evento` | Full-screen error: "No pudimos cargar este evento" + "Reintentar" + "Volver al feed" |
 
 ### Estado de éxito
 
-> ✅ **Eventos descubiertos.** Valentina encuentra 3 conciertos underground de shoegaze esta semana en Medellín a menos de 5 km, con precios dentro de su presupuesto. Toca el que más le interesa para ver detalles completos.
+> ✅ Valentina revisó el line-up, escuchó 3 canciones del artista principal desde el detalle, vio que 5 personas que sigue irán, confirmó que el venue está a 15 min en metro y el cover es $35.000 COP. Toca "Ver boletos" con intención de compra.
 
 ---
 
----
+## Flujo 3: Compra de Boletos
 
-## Flujo 3: Visualización de Detalle de Evento y Guardado
-
-**Actor:** Valentina Restrepo (usuario autenticado)
-**Objetivo:** Evaluar un evento específico, guardarlo en favoritos y compartirlo con amigos.
-
----
+> **Actor:** Valentina Restrepo
+> **Objetivo:** Comprar un boleto de forma segura sin salir de la app, evitando revendedores.
+> **Pantalla de entrada:** `1.2.3 Selección de boletos y precios`
 
 ### Pasos
 
-| # | Acción del usuario | Pantalla | Componente clave |
+| # | Acción del usuario | Pantalla | Sistema responde |
 |---|---|---|---|
-| 1 | Llega desde Radar, Explorar o notificación | `Detalle de Evento` | Hero image/flyer + info principal (nombre, artista, fecha, hora, venue, precio) |
-| 2 | Hace scroll para ver info completa | `Detalle — Sección media` | Lineup completo · descripción · reglas del evento |
-| 3 | Revisa ubicación del venue | `Detalle — Mapa inline` | Mapa estático del venue + botón "Cómo llegar" (abre Google Maps / Waze / Apple Maps) |
-| 4 | Consulta reseñas de ediciones anteriores | `Detalle — Reseñas` | Rating promedio (estrellas) + lista de reseñas con texto, fecha y avatar |
-| 5 | Verifica si amigos asistirán | `Detalle — Social` | Avatares de amigos que van + contador total: *"12 personas van · 3 amigos"* |
-| 6 | Toca botón "Guardar / Favorito" (corazón) | `Detalle de Evento` | Icono corazón → animación llenado + haptic feedback + snackbar: *"Guardado en tus favoritos"* |
-| 7 | Toca botón "Compartir" | `Detalle — Share sheet` | Sheet nativo: WhatsApp · Instagram Stories · Copiar link · Más opciones |
-| 8 | Comparte por WhatsApp a su grupo | `WhatsApp (externo)` | Deep link con preview: imagen + nombre evento + fecha + link a la app |
-| 9 | Regresa a la app y decide comprar | `Detalle de Evento` | CTA sticky inferior: "Comprar boleto — desde $35.000" → Flujo 4 |
+| 1 | Visualiza opciones de boletos disponibles | `1.2.3 Selección de boletos` | Lista de tipos de boleto: General ($35.000), Early Bird ($25.000 — tachado/agotado), VIP ($80.000). Cada uno muestra: precio, beneficios, disponibilidad restante ("quedan 14") |
+| 2 | Selecciona "General" y cantidad: 2 boletos | `1.2.3 Selección de boletos` | Actualiza resumen: 2× General = $70.000. Muestra fee de servicio: $4.200. **Total: $74.200 COP**. Timer de reserva inicia (10 min) |
+| 3 | Toca "Continuar al pago" | `Checkout — Datos del comprador` | Formulario: nombre, email, teléfono. Si hay sesión activa, pre-rellena datos. Checkbox: "El segundo boleto es para otra persona" → campo de nombre/email adicional |
+| 4 | Completa datos y toca "Ir al pago" | `Checkout — Método de pago` | Opciones: tarjeta crédito/débito (formulario inline), PSE (redirect), Nequi/Daviplata (deep link), efectivo en punto físico. Tarjetas guardadas si las hay |
+| 5 | Selecciona Nequi → confirma en la app de Nequi | `Checkout — Procesando pago` (loading state) | Muestra spinner con "Procesando tu pago…" + "No cierres la app". Deep link a Nequi para autorización. Escucha webhook de confirmación |
+| 6 | Pago confirmado | `Checkout — Confirmación` | Pantalla de éxito con confetti/animación. Muestra: código QR del boleto, resumen de compra, botón "Agregar al calendario", botón "Compartir con amigos", botón "Ver mis boletos" |
 
 ### Estados de error
 
-| Código | Condición | Pantalla | Comportamiento |
+| Código | Error | Pantalla | Mensaje / Acción |
 |---|---|---|---|
-| `ERR-15` | Evento no encontrado (link roto / eliminado) | `Detalle — Error` | Fullscreen: *"Este evento ya no está disponible"* + ilustración + CTA "Explorar eventos cercanos" |
-| `ERR-16` | Falla al guardar en favoritos | `Detalle de Evento` | Icono corazón revierte a vacío + toast: *"No se pudo guardar. Intenta de nuevo."* con retry inline |
-| `ERR-17` | Falla al cargar reseñas | `Detalle — Reseñas` | Placeholder: *"No pudimos cargar las reseñas"* + botón "Reintentar". Resto del detalle funcional |
-| `ERR-18` | Falla al generar link para compartir | `Detalle — Share sheet` | Toast: *"Error generando el enlace. Intenta de nuevo."* |
-| `ERR-19` | Datos del evento incompletos (sin precio publicado) | `Detalle de Evento` | Campo precio: *"Precio por confirmar"* + CTA cambia a "Activar alerta de precio" |
-| `ERR-20` | Sin conexión al abrir detalle | `Detalle de Evento` | Si está en caché: muestra datos guardados + banner *"Offline — algunos datos pueden no estar actualizados"*. Si no hay caché → `ERR-15` |
+| `E3.1` | **Timer de reserva expirado** | `Checkout (cualquier paso)` | Modal: "Tu reserva expiró. Los boletos fueron liberados" + CTA "Volver a seleccionar boletos" (regresa a `1.2.3`). Si aún hay disponibilidad, mantiene la selección previa |
+| `E3.2` | **Boletos agotados durante el checkout** | `Checkout — Procesando pago` | Modal: "¡Lo sentimos! Los boletos General se agotaron mientras completabas la compra" + "Unirme a lista de espera" + "Ver otros tipos de boleto" (si hay VIP disponible) |
+| `E3.3` | **Pago rechazado por el banco** | `Checkout — Método de pago` | Inline error: "Tu banco rechazó la transacción. Verifica tus datos o intenta con otro método de pago" + opciones alternativas visibles. No pierde la reserva (timer sigue) |
+| `E3.4` | **Timeout del procesador de pago** | `Checkout — Procesando pago` | Tras 60s: "No pudimos confirmar tu pago. **No se realizó ningún cobro.**" + "Reintentar" + "Contactar soporte" + ID de referencia para seguimiento |
+| `E3.5` | **Pago duplicado detectado** | `Checkout — Confirmación` | "Detectamos un posible cobro duplicado. Tu compra fue registrada correctamente. Si ves un cobro extra, será revertido en 24-48h" + enlace a soporte |
+| `E3.6` | **Límite de boletos por persona excedido** | `1.2.3 Selección de boletos` | Inline: "Máximo 4 boletos por persona para este evento" + selector bloqueado en 4 |
+| `E3.7` | **Sesión expirada / no autenticado** | `Checkout — Datos del comprador` | Modal: "Inicia sesión para continuar tu compra" + login/registro rápido. Al autenticarse, retorna al checkout con selección preservada |
 
 ### Estado de éxito
 
-> ✅ **Evento evaluado y guardado.** Valentina revisó toda la información del concierto de shoegaze en el venue "Sala Surterráneo", confirmó que 2 amigos van, lo guardó en favoritos y lo compartió por WhatsApp a su grupo. Procede a comprar boleto.
+> ✅ Valentina compró 2 boletos generales por $74.200 COP vía Nequi en menos de 2 minutos. Recibió su código QR instantáneamente, agregó el evento a Google Calendar y compartió el segundo boleto por WhatsApp a su amiga. Compra registrada en `Mis Boletos`.
 
 ---
 
----
+## Flujo 4: Búsqueda de Artista o Evento Específico
 
-## Flujo 4: Compra de Boleto
-
-**Actor:** Valentina Restrepo (usuario autenticado)
-**Objetivo:** Comprar un boleto general para el concierto al menor costo posible, con seguridad de que es legítimo.
-
----
+> **Actor:** Valentina Restrepo
+> **Objetivo:** Encontrar si un artista específico tiene fechas próximas en su ciudad o en ciudades cercanas.
+> **Pantalla de entrada:** `2.1 Barra de búsqueda global`
 
 ### Pasos
 
-| # | Acción del usuario | Pantalla | Componente clave |
+| # | Acción del usuario | Pantalla | Sistema responde |
 |---|---|---|---|
-| 1 | Toca "Comprar boleto" desde Detalle de Evento | `Compra — Selección de boleto` | Tarjetas por tipo: General ($35.000) · VIP ($80.000) · Early Bird (agotado). Badge "Menor comisión" en general |
-| 2 | Selecciona tipo "General" | `Compra — Selección de boleto` | Card seleccionada con borde activo + detalle: *qué incluye* |
-| 3 | Selecciona cantidad (1 boleto) | `Compra — Cantidad` | Stepper (- 1 +) con límite máximo por transacción + subtotal actualizado en tiempo real |
-| 4 | Revisa resumen de compra | `Compra — Resumen` | Desglose: subtotal + comisión de servicio + total. Sección de código promocional (input + "Aplicar") |
-| 5 | Ingresa código promocional (opcional) | `Compra — Resumen` | Input: "INDIE2024" → validación → descuento aplicado con tachado en precio original |
-| 6 | Selecciona método de pago | `Compra — Método de pago` | Opciones: tarjeta guardada · nueva tarjeta · PSE · Nequi · efectivo (Efecty/Baloto) |
-| 7 | Confirma datos de tarjeta (o autentica con Nequi) | `Compra — Datos de pago` | Formulario seguro (PCI compliant): número, vencimiento, CVV + checkbox "Guardar para futuras compras" |
-| 8 | Toca "Pagar $33.250" | `Compra — Procesando` | Loader animado: *"Procesando tu pago de forma segura..."* (no permitir back) |
-| 9 | Pago exitoso | `Compra — Confirmación` | ✅ Animación de éxito + resumen + boleto digital con QR + opciones post-compra |
-| 10 | Descarga / guarda boleto | `Compra — Confirmación` | Botones: "Agregar a Apple Wallet" · "Guardar en Google Wallet" · "Descargar PDF" |
+| 1 | Toca el tab "Búsqueda" en la barra de navegación | `2.1 Búsqueda` | Muestra barra de búsqueda con foco automático (teclado abierto) + búsquedas recientes + sugerencias trending en su ciudad |
+| 2 | Escribe "Divino Niño" (banda indie) | `2.1 Búsqueda` (con resultados en vivo) | Autocomplete muestra sugerencias agrupadas: **Artistas** → "Divino Niño", **Eventos** → "Divino Niño en Bar X — 15 dic", **Venues** → ninguno. Resultados aparecen tras 2 caracteres con debounce de 300ms |
+| 3 | Toca el resultado del artista "Divino Niño" | `Perfil de artista` (dentro de `2.2 Resultados`) | Página del artista: bio, géneros, foto, playlist embebida, lista de próximos eventos ordenados por fecha. Muestra eventos en Medellín primero (por proximidad) + otras ciudades |
+| 4 | Ve que hay un evento el 15 de diciembre en Medellín | `Perfil de artista → lista de eventos` | Card del evento con: fecha, venue, precio desde, disponibilidad. CTA "Ver detalle" |
+| 5 | Toca "Ver detalle" en el evento del 15 dic | `Perfil de artista → 1.2 Detalle de evento` | Navega al detalle de evento completo (misma pantalla que Flujo 2). Breadcrumb/back navega a perfil de artista |
+| 6 | Toca ♡ "Seguir artista" (acción secundaria en perfil) | `Perfil de artista` | Artista agregado a favoritos. Confirmación: "Te notificaremos cuando Divino Niño tenga nuevas fechas cerca de ti" |
 
 ### Estados de error
 
-| Código | Condición | Pantalla | Comportamiento |
+| Código | Error | Pantalla | Mensaje / Acción |
 |---|---|---|---|
-| `ERR-21` | Tipo de boleto agotado al intentar seleccionar | `Compra — Selección` | Card deshabilitada con badge "Agotado" + CTA "Activar alerta si se liberan boletos" |
-| `ERR-22` | Cantidad excede disponibilidad | `Compra — Cantidad` | Stepper bloqueado en máx + tooltip: *"Solo quedan N boletos disponibles"* |
-| `ERR-23` | Código promocional inválido/expirado | `Compra — Resumen` | Inline error bajo input: *"Código no válido o expirado"* + campo resaltado en rojo |
-| `ERR-24` | Tarjeta rechazada por el banco | `Compra — Datos de pago` | Modal: *"Tu banco rechazó la transacción. Verifica los datos o usa otro método."* + botones "Reintentar" · "Cambiar método" |
-| `ERR-25` | Timeout en procesamiento de pago (> 30s) | `Compra — Procesando` | Modal: *"El pago está tardando más de lo normal. No cierres la app."* → tras 60s: *"No pudimos confirmar el pago. Revisa tu email o historial bancario antes de reintentar."* + link a soporte |
-| `ERR-26` | Pago duplicado detectado | `Compra — Procesando` | Modal: *"Detectamos un intento de pago previo para este evento. Revisa 'Mis boletos' antes de continuar."* + CTA "Ir a Mis boletos" |
-| `ERR-27` | Boletos se agotan durante el checkout (race condition) | `Compra — Procesando` | Modal: *"¡Lo sentimos! Los boletos se agotaron mientras procesábamos tu compra. No se realizó ningún cargo."* + CTA "Ver eventos similares" |
-| `ERR-28` | Sesión expirada durante checkout | `Compra — Datos de pago` | Modal: *"Tu sesión expiró por seguridad. Inicia sesión para continuar."* → Login → regresa al resumen con datos preservados |
-| `ERR-29` | Falla al generar boleto digital post-pago | `Compra — Confirmación` | Banner: *"Tu pago fue exitoso pero el boleto tardará unos minutos. Lo recibirás por email y en 'Mis boletos'."* |
+| `E4.1` | **Sin resultados para la búsqueda** | `2.2 Resultados de búsqueda` | Empty state: "No encontramos resultados para 'Dvino Niño'" + **"¿Quisiste decir 'Divino Niño'?"** (corrección ortográfica) + "Sugerir que agreguemos este artista" (formulario) |
+| `E4.2` | **Artista existe pero sin eventos próximos** | `Perfil de artista` | Sección de eventos: "Divino Niño no tiene eventos programados por ahora" + CTA prominente "Seguir artista para recibir alertas" + sección "Artistas similares con eventos próximos" |
+| `E4.3` | **Artista sin eventos en la ciudad del usuario** | `Perfil de artista` | "No hay eventos en Medellín" + lista de eventos en otras ciudades con distancia. Toggle "Notificarme si viene a Medellín" |
+| `E4.4` | **Error de conexión durante búsqueda** | `2.1 Búsqueda` | Debajo de la barra: "No pudimos buscar. Revisa tu conexión" + muestra búsquedas recientes como fallback |
+| `E4.5` | **Búsqueda vacía (campo sin texto)** | `2.1 Búsqueda` | Muestra: búsquedas recientes, artistas seguidos con eventos nuevos, trending en la ciudad. No es un error, es un estado de oportunidad |
 
 ### Estado de éxito
 
-> ✅ **Compra completada.** Valentina adquirió 1 boleto general a $33.250 COP (con descuento del código INDIE2024, comisión incluida). Recibe boleto digital con QR en la app, lo agrega a Apple Wallet y le llega confirmación por email. El evento aparece automáticamente en su calendario dentro de la app.
+> ✅ Valentina encontró que Divino Niño toca el 15 de diciembre en un bar de Medellín, siguió al artista para futuras alertas, y navegó directamente al detalle del evento para evaluar la compra.
 
 ---
 
----
+## Flujo 5: Gestión de Boletos y Acceso al Evento
 
-## Flujo 5: Gestión de Eventos Guardados y Notificaciones
-
-**Actor:** Valentina Restrepo (usuario autenticado)
-**Objetivo:** Revisar eventos guardados, gestionar sus boletos comprados y recibir alertas relevantes sin perderse conciertos.
-
----
+> **Actor:** Valentina Restrepo
+> **Objetivo:** Acceder a sus boletos comprados el día del evento para ingresar al venue.
+> **Pantalla de entrada:** `Mis Boletos` (tab en navegación principal o sección de perfil)
 
 ### Pasos
 
-| # | Acción del usuario | Pantalla | Componente clave |
+| # | Acción del usuario | Pantalla | Sistema responde |
 |---|---|---|---|
-| 1 | Navega a su perfil desde tab bar | `Perfil / Mi cuenta` | Avatar, nombre, ciudad, géneros + accesos: Mis boletos · Favoritos · Configuración |
-| 2 | Toca "Favoritos" | `Mis Favoritos` | Lista de eventos guardados con cards (imagen, nombre, fecha, venue, estado de disponibilidad) |
-| 3 | Filtra favoritos por fecha (próximos primero) | `Mis Favoritos` | Tabs: "Próximos" · "Pasados" + ordenamiento |
-| 4 | Ve que un evento guardado tiene alerta de precio | `Mis Favoritos — Card` | Badge: *"⚡ Early bird disponible — quedan 2 días"* |
-| 5 | Navega a "Mis Boletos" | `Mis Boletos` | Lista: boletos activos (con QR) arriba · pasados abajo. Card con estado: Activo / Usado / Cancelado |
-| 6 | Abre boleto del concierto de shoegaze | `Detalle de Boleto` | QR code grande + info del evento + hora de apertura de puertas + botón "Agregar a calendario" |
-| 7 | Agrega al calendario del dispositivo | `Detalle de Boleto` | Permiso calendario → evento creado con dirección + recordatorio 2h antes |
-| 8 | Configura preferencias de notificaciones | `Configuración — Notificaciones` | Toggles: nuevos eventos de tus géneros · precios especiales · recordatorios de eventos guardados · amigos que van · artistas seguidos |
-| 9 | Recibe push notification 24h antes del evento | `Notificación push (sistema)` | *"🎸 Mañana: [Evento] a las 8PM en Sala Surterráneo. Tu boleto está listo."* → abre `Detalle de Boleto` |
-| 10 | Recibe notificación de nuevo evento relevante | `Notificación push (sistema)` | *"Nuevo en Medellín: [Artista de shoegaze] toca este sábado 🎶"* → abre `Detalle de Evento` |
+| 1 | Toca tab "Mis Boletos" el día del evento | `Mis Boletos` (lista) | Muestra boletos organizados: **Próximos** (ordenados por fecha, el más cercano arriba) y **Pasados** (historial). El boleto de hoy tiene badge "HOY" con highlight visual |
+| 2 | Toca el boleto del evento de hoy | `Detalle de boleto` | Muestra: código QR grande y luminoso (brillo de pantalla al máximo automáticamente), nombre del evento, fecha/hora, venue, tipo de boleto, nombre del asistente, número de orden |
+| 3 | Activa "Modo presentación" (opcional) | `Detalle de boleto — Modo QR` | Pantalla fullscreen con QR, fondo oscuro, brillo máximo bloqueado, sin timeout de pantalla. Optimizado para escaneo rápido en la puerta |
+| 4 | Personal del venue escanea el QR | `Detalle de boleto` | El QR se valida server-side. El boleto cambia a estado "✓ Utilizado" con timestamp. Animación de check verde |
+| 5 | Toca "Cómo llegar" (shortcut en el boleto) | `Detalle de boleto → 1.2.2 Info del venue` | Abre ficha del venue con navegación (mismo componente que Flujo 2, paso 3) |
+| 6 | Después del evento, recibe prompt de reseña | `Notificación push → Escribir reseña` (al día siguiente) | "¿Cómo estuvo Divino Niño anoche?" → Rating (1-5) + texto opcional + ¿Lo recomendarías? → Publica en `1.2.5 Reseñas` |
 
 ### Estados de error
 
-| Código | Condición | Pantalla | Comportamiento |
+| Código | Error | Pantalla | Mensaje / Acción |
 |---|---|---|---|
-| `ERR-30` | Lista de favoritos vacía | `Mis Favoritos` | Empty state: ilustración + *"Aún no has guardado eventos"* + CTA "Explorar el radar" |
-| `ERR-31` | Evento favorito fue cancelado | `Mis Favoritos — Card` | Card con overlay semitransparente + badge "Cancelado" + toast automático: *"Un evento guardado fue cancelado"* + opción "Ver similares" |
-| `ERR-32` | Lista de boletos vacía | `Mis Boletos` | Empty state: *"No tienes boletos aún. ¡Tu próximo concierto te espera!"* + CTA "Descubrir eventos" |
-| `ERR-33` | QR del boleto no carga (sin conexión) | `Detalle de Boleto` | Muestra QR desde caché local (generado al momento de compra). Si no hay caché: *"Activa tu conexión para mostrar el QR"* + código alfanumérico de respaldo |
-| `ERR-34` | Falla al agregar evento al calendario | `Detalle de Boleto` | Toast: *"No se pudo agregar al calendario. Verifica los permisos en Ajustes."* + link a settings |
-| `ERR-35` | Notificaciones deshabilitadas a nivel sistema | `Configuración — Notificaciones` | Banner informativo: *"Las notificaciones están desactivadas en tu dispositivo"* + botón "Abrir ajustes del sistema" |
-| `ERR-36` | Error cargando historial de boletos | `Mis Boletos` | Skeleton → error: *"No pudimos cargar tus boletos"* + botón "Reintentar". Nota: *"Si compraste recientemente, revisa tu email de confirmación"* |
-| `ERR-37` | Evento pasado desaparece de favoritos | `Mis Favoritos — Pasados` | Card en gris con fecha pasada + opción "Dejar reseña" → vincula a sistema de reseñas |
+| `E5.1` | **Sin conexión en el venue (QR offline)** | `Detalle de boleto` | El QR se genera y **cachea localmente** al momento de la compra. Banner: "Estás offline, pero tu boleto está disponible" — funcionalidad completa sin internet |
+| `E5.2` | **QR ya fue escaneado (duplicado)** | `Detalle de boleto` | Estado cambia a "⚠️ Este boleto ya fue utilizado a las [hora]". Si el usuario cree que es un error: botón "Reportar problema" → chat con soporte + ID de transacción |
+| `E5.3` | **Boleto transferido y ya no pertenece al usuario** | `Mis Boletos` | El boleto desaparece de "Próximos". Si busca acceder por deep link: "Este boleto fue transferido a [nombre] el [fecha]" + "Contactar soporte" |
+| `E5.4` | **Evento cancelado después de la compra** | `Mis Boletos → Detalle de boleto` | Badge rojo "CANCELADO". Info: "Este evento fue cancelado. Tu reembolso de $74.200 será procesado en 5-10 días hábiles al método de pago original" + estado del reembolso (pendiente/procesado/completado) |
+| `E5.5` | **App no instalada / sesión cerrada el día del evento** | `Fuera de la app` | Email de recordatorio 4h antes con: enlace al boleto web (fallback sin app), instrucciones para re-descargar, PDF adjunto con QR como último recurso |
+| `E5.6` | **Brillo de pantalla bajo impide escaneo** | `Detalle de boleto — Modo QR` | Auto-detecta brillo bajo: "Subimos el brillo para facilitar el escaneo" (ajuste automático con permiso) + botón manual "Maximizar brillo" |
 
 ### Estado de éxito
 
-> ✅ **Eventos bajo control.** Valentina tiene 5 eventos en favoritos organizados por fecha, 1 boleto activo con QR accesible offline, recordatorio en su calendario para mañana a las 6PM y notificaciones configuradas para enterarse de nuevos eventos de shoegaze y math rock en Medellín en tiempo real. No se volverá a perder un concierto underground.
+> ✅ Valentina llegó al venue, abrió la app, su boleto de hoy estaba destacado como primero en la lista. Activó modo presentación, el staff escaneó su QR en 2 segundos, ingresó sin problemas. Al día siguiente, dejó una reseña de 5 estrellas que ayudará a otros usuarios a descubrir el evento en futuras ediciones.
 
 ---
 
----
+## Resumen de cobertura
 
-## Mapa de Relación entre Flujos
+| Flujo | Loop del usuario | Pantallas MVP tocadas | Errores definidos |
+|---|---|---|---|
+| **1. Descubrimiento** | Descubrir | `1.1` `1.3.1` `1.3.2` | 5 |
+| **2. Evaluación** | Evaluar | `1.2` `1.2.1` `1.2.2` `1.2.5` | 5 |
+| **3. Compra** | Comprar | `1.2.3` `Checkout ×4` | 7 |
+| **4. Búsqueda** | Descubrir (dirigido) | `2.1` `2.2` `Perfil artista` | 5 |
+| **5. Acceso** | Asistir + Redescubrir | `Mis Boletos` `Detalle boleto` `Reseña` | 6 |
+| | | **Total: 16 pantallas únicas** | **28 estados de error** |
 
-```
-┌──────────────┐     ┌──────────────────┐     ┌──────────────────┐
-│   FLUJO 1    │     │     FLUJO 2       │     │     FLUJO 3       │
-│  Onboarding  │────▶│  Descubrimiento   │────▶│  Detalle + Guardar│
-│              │     │  en el Radar       │     │                   │
-└──────────────┘     └──────────────────┘     └────────┬──────────┘
-                                                        │
-                                              ┌────────▼──────────┐
-                                              │     FLUJO 4       │
-                                              │  Compra de Boleto  │
-                                              └────────┬──────────┘
-                                                        │
-                                              ┌────────▼──────────┐
-                                              │     FLUJO 5       │
-                                              │  Favoritos, Boletos│
-                                              │  y Notificaciones  │
-                                              └───────────────────┘
-```
-
-> **Nota sobre la persona:** Todos los flujos están diseñados considerando las frustraciones de Valentina: el Flujo 2 resuelve la información dispersa con un radar centralizado; el Flujo 4 aborda las comisiones abusivas mostrando desglose transparente; los Flujos 2-3 permiten filtrar por géneros nicho; y el Flujo 4 garantiza autenticidad de boletos eliminando la reventa no verificada.
+> **Nota de diseño:** Todos los estados de error siguen el principio de **recuperación asistida** — ningún error es un callejón sin salida. Cada uno ofrece al menos una acción concreta para que el usuario avance o resuelva el problema.
